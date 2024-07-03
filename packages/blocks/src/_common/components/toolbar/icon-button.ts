@@ -133,6 +133,17 @@ export class EditorIconButton extends LitElement {
   constructor() {
     super();
 
+    // Allow activate button by pressing Enter key
+    this.addEventListener('keypress', event => {
+      if (this.disabled) {
+        return;
+      }
+      if (event.key === 'Enter' && !event.isComposing) {
+        this.click();
+      }
+    });
+
+    // Prevent click event when disabled
     this.addEventListener(
       'click',
       event => {
@@ -147,6 +158,7 @@ export class EditorIconButton extends LitElement {
 
   override connectedCallback() {
     super.connectedCallback();
+    this.tabIndex = 0;
     this.role = 'button';
   }
 
