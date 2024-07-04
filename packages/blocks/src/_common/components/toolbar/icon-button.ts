@@ -10,6 +10,13 @@ import { styleMap } from 'lit/directives/style-map.js';
 @customElement('editor-icon-button')
 export class EditorIconButton extends LitElement {
   static override styles = css`
+    :host([disabled]),
+    :host(:disabled) {
+      pointer-events: none;
+      cursor: not-allowed;
+      color: var(--affine-text-disable-color);
+    }
+
     .icon-container {
       position: relative;
       display: flex;
@@ -33,12 +40,6 @@ export class EditorIconButton extends LitElement {
       background: var(--affine-hover-color);
     }
 
-    .icon-container[disabled] {
-      pointer-events: none;
-      cursor: not-allowed;
-      color: var(--affine-text-disable-color);
-    }
-
     .icon-container[coming] {
       cursor: not-allowed;
       color: var(--affine-text-disable-color);
@@ -46,6 +47,7 @@ export class EditorIconButton extends LitElement {
 
     ::slotted(svg) {
       flex-shrink: 0;
+      width: var(--icon-size, unset);
       height: var(--icon-size, unset);
     }
 
@@ -79,7 +81,7 @@ export class EditorIconButton extends LitElement {
     }
   `;
 
-  @property({ attribute: false })
+  @property({ type: Boolean, reflect: true })
   accessor disabled = false;
 
   @property({ attribute: false })

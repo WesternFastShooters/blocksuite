@@ -489,13 +489,13 @@ export class EdgelessChangeEmbedCardButton extends WithDisposable(LitElement) {
             buttons,
             button => button.name,
             ({ name, icon, handler, disabled }) => html`
-              <affine-menu-action
+              <editor-menu-action
                 aria-label=${name}
                 ?disabled=${disabled}
                 @click=${handler}
               >
                 ${icon}<span class="label">${name}</span>
-              </affine-menu-action>
+              </editor-menu-action>
             `
           )}
         </div>
@@ -520,16 +520,16 @@ export class EdgelessChangeEmbedCardButton extends WithDisposable(LitElement) {
     if (this._canConvertToEmbedView || this._isEmbedView) {
       const buttons = [
         {
-          type: 'embed',
-          name: 'Embed view',
-          handler: () => this._convertToEmbedView(),
-          disabled: this.model.doc.readonly && this._embedViewButtonDisabled,
-        },
-        {
           type: 'card',
           name: 'Card view',
           handler: () => this._convertToCardView(),
           disabled: this.model.doc.readonly,
+        },
+        {
+          type: 'embed',
+          name: 'Embed view',
+          handler: () => this._convertToEmbedView(),
+          disabled: this.model.doc.readonly && this._embedViewButtonDisabled,
         },
       ];
 
@@ -558,7 +558,7 @@ export class EdgelessChangeEmbedCardButton extends WithDisposable(LitElement) {
               buttons,
               button => button.type,
               ({ type, name, handler, disabled }) => html`
-                <affine-menu-action
+                <editor-menu-action
                   aria-label=${name}
                   data-testid=${`link-to-${type}`}
                   ?data-selected=${this._viewType === type}
@@ -566,7 +566,7 @@ export class EdgelessChangeEmbedCardButton extends WithDisposable(LitElement) {
                   @click=${handler}
                 >
                   ${name}
-                </affine-menu-action>
+                </editor-menu-action>
               `
             )}
           </div>

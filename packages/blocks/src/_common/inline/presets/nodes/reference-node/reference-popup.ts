@@ -221,13 +221,13 @@ export class ReferencePopup extends WithDisposable(LitElement) {
             buttons,
             button => button.name,
             ({ name, icon, handler, disabled }) => html`
-              <affine-menu-action
+              <editor-menu-action
                 aria-label=${name}
                 ?disabled=${disabled}
                 @click=${handler}
               >
                 ${icon}<span class="label">${name}</span>
-              </affine-menu-action>
+              </editor-menu-action>
             `
           )}
         </div>
@@ -235,7 +235,7 @@ export class ReferencePopup extends WithDisposable(LitElement) {
     `;
   }
 
-  private _viewActions() {
+  private _viewMenuButton() {
     // synced doc entry controlled by awareness flag
     const isSyncedDocEnabled = this.doc.awarenessStore.getFlag(
       'enable_synced_doc_block'
@@ -248,6 +248,12 @@ export class ReferencePopup extends WithDisposable(LitElement) {
       name: 'Inline view',
     });
 
+    buttons.push({
+      type: 'card',
+      name: 'Card view',
+      handler: () => this._convertToCardView(),
+    });
+
     if (isSyncedDocEnabled) {
       buttons.push({
         type: 'embed',
@@ -257,27 +263,40 @@ export class ReferencePopup extends WithDisposable(LitElement) {
       });
     }
 
-    buttons.push({
-      type: 'card',
-      name: 'Card view',
-      handler: () => this._convertToCardView(),
-    });
-
-    return repeat(
-      buttons,
-      button => button.type,
-      ({ type, name, handler, disabled }) => html`
-        <affine-menu-action
-          aria-label=${name}
-          data-testid=${`link-to-${type}`}
-          ?data-selected=${type === 'inline'}
-          ?disabled=${disabled}
-          @click=${handler}
-        >
-          ${name}
-        </affine-menu-action>
-      `
-    );
+    return html`
+      <editor-menu-button
+        .contentPadding=${'8px'}
+        .button=${html`
+          <editor-icon-button
+            aria-label="Switch view"
+            .justify=${'space-between'}
+            .labelHeight=${'20px'}
+            .iconContainerWidth=${'110px'}
+          >
+            <span class="label">Inline view</span>
+            ${SmallArrowDownIcon}
+          </editor-icon-button>
+        `}
+      >
+        <div slot data-size="small" data-orientation="vertical">
+          ${repeat(
+            buttons,
+            button => button.type,
+            ({ type, name, handler, disabled }) => html`
+              <editor-menu-action
+                aria-label=${name}
+                data-testid=${`link-to-${type}`}
+                ?data-selected=${type === 'inline'}
+                ?disabled=${disabled}
+                @click=${handler}
+              >
+                ${name}
+              </editor-menu-action>
+            `
+          )}
+        </div>
+      </editor-menu-button>
+    `;
   }
 
   private _moreActions() {
@@ -346,26 +365,7 @@ export class ReferencePopup extends WithDisposable(LitElement) {
     const buttons = [
       this._openMenuButton(),
 
-      html`
-        <editor-menu-button
-          .contentPadding=${'8px'}
-          .button=${html`
-            <editor-icon-button
-              aria-label="Switch view"
-              .justify=${'space-between'}
-              .labelHeight=${'20px'}
-              .iconContainerWidth=${'110px'}
-            >
-              <span class="label">Inline view</span>
-              ${SmallArrowDownIcon}
-            </editor-icon-button>
-          `}
-        >
-          <div slot data-size="small" data-orientation="vertical">
-            ${this._viewActions()}
-          </div>
-        </editor-menu-button>
-      `,
+      this._viewMenuButton(),
 
       html`
         <editor-menu-button

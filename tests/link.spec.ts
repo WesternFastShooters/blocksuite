@@ -376,26 +376,27 @@ test('create link with paste', async ({ page }) => {
   await focusRichText(page);
   await type(page, 'aaa');
 
-  const createLinkPopoverLocator = page.locator('.affine-link-popover.create');
-  const confirmBtn = page.locator('.affine-link-popover icon-button');
-
   await dragBetweenIndices(page, [0, 0], [0, 3]);
   await pressCreateLinkShortCut(page);
+
+  const createLinkPopoverLocator = page.locator('.affine-link-popover.create');
+  const confirmBtn = createLinkPopoverLocator.locator('.affine-confirm-button');
+
   await expect(createLinkPopoverLocator).toBeVisible();
-  await expect(confirmBtn).toHaveAttribute('data-test-disabled', 'true');
+  await expect(confirmBtn).toHaveAttribute('disabled');
 
   await type(page, 'affine.pro');
-  await expect(confirmBtn).toHaveAttribute('data-test-disabled', 'false');
+  await expect(confirmBtn).not.toHaveAttribute('disabled');
   await selectAllByKeyboard(page);
   await cutByKeyboard(page);
 
   // press enter should not trigger confirm
   await pressEnter(page);
   await expect(createLinkPopoverLocator).toBeVisible();
-  await expect(confirmBtn).toHaveAttribute('data-test-disabled', 'true');
+  await expect(confirmBtn).toHaveAttribute('disabled');
 
   await pasteByKeyboard(page, false);
-  await expect(confirmBtn).toHaveAttribute('data-test-disabled', 'false');
+  await expect(confirmBtn).not.toHaveAttribute('disabled');
   await pressEnter(page);
   await expect(createLinkPopoverLocator).not.toBeVisible();
   await assertStoreMatchJSX(
