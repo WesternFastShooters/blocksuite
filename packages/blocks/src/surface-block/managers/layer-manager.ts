@@ -5,7 +5,7 @@ import { generateKeyBetween } from 'fractional-indexing';
 
 import { last, nToLast } from '../../_common/utils/iterable.js';
 import { matchFlavours } from '../../_common/utils/model.js';
-import type { FrameBlockModel } from '../../frame-block/frame-model.js';
+import { FrameBlockModel } from '../../frame-block/frame-model.js';
 import { EdgelessBlockModel } from '../../root-block/edgeless/edgeless-block-model.js';
 import { Bound } from '../../surface-block/utils/bound.js';
 import {
@@ -683,6 +683,25 @@ export class LayerManager {
 
   getCanvasLayers() {
     return this.canvasLayers;
+  }
+
+  getZIndex(element: BlockSuite.EdgelessModelType): number {
+    if (element instanceof FrameBlockModel) {
+      const lastLayer = last(this.layers);
+      const frameIndex = this.frames.indexOf(element);
+
+      return lastLayer
+        ? lastLayer.zIndex + lastLayer.elements.length + frameIndex
+        : frameIndex;
+    }
+
+    // @ts-ignore
+    const layer = this.layers.find(layer => layer.set.has(element));
+
+    if (!layer) return -1;
+
+    // @ts-ignore
+    return layer.zIndex + layer.elements.indexOf(element);
   }
 
   generateIndex(elementType: string): string {

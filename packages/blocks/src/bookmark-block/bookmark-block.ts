@@ -62,6 +62,10 @@ export class BookmarkBlockComponent extends BlockComponent<
     );
   };
 
+  toZIndex() {
+    return this.rootService?.layer.getZIndex(this.model) ?? 1;
+  }
+
   override connectedCallback() {
     super.connectedCallback();
 
@@ -89,6 +93,12 @@ export class BookmarkBlockComponent extends BlockComponent<
     );
 
     if (this._isInSurface) {
+      this.rootService &&
+        this._disposables.add(
+          this.rootService.layer.slots.layerUpdated.on(() => {
+            this.requestUpdate();
+          })
+        );
       this.style.position = 'absolute';
     }
   }
@@ -127,6 +137,7 @@ export class BookmarkBlockComponent extends BlockComponent<
       this.style.top = `${bound.y}px`;
       this.style.width = `${width}px`;
       this.style.height = `${height}px`;
+      this.style.zIndex = `${this.toZIndex()}`;
     }
 
     return html`

@@ -26,7 +26,6 @@ import {
   type IPoint,
   isPinchEvent,
   NoteDisplayMode,
-  on,
   Point,
   requestConnectedFrame,
   requestThrottledConnectFrame,
@@ -50,10 +49,7 @@ import {
   serializeXYWH,
   Vec,
 } from '../../surface-block/index.js';
-import type {
-  IndexedCanvasUpdateEvent,
-  SurfaceBlockComponent,
-} from '../../surface-block/surface-block.js';
+import type { SurfaceBlockComponent } from '../../surface-block/surface-block.js';
 import type { SurfaceBlockModel } from '../../surface-block/surface-model.js';
 import type { FontLoader } from '../font-loader/font-loader.js';
 import type { RootBlockModel } from '../root-model.js';
@@ -379,36 +375,6 @@ export class EdgelessRootBlockComponent extends BlockElement<
     });
   }
 
-  private _initSurface() {
-    const appendIndexedCanvasToPortal = (
-      canvases: HTMLCanvasElement[] = this.surface.renderer.stackingCanvas
-    ) => {
-      this.rootElementContainer.setSlotContent(canvases);
-    };
-
-    this._disposables.add(
-      on(this.surface, 'indexedcanvasupdate', e => {
-        appendIndexedCanvasToPortal(
-          (e as IndexedCanvasUpdateEvent).detail.content
-        );
-      })
-    );
-
-    this._disposables.add(
-      this.std.event.slots.editorHostPanned.on(() => {
-        this.service.viewport.onResize();
-      })
-    );
-
-    if (this.rootElementContainer.isUpdatePending) {
-      this.rootElementContainer.updateComplete
-        .then(() => appendIndexedCanvasToPortal())
-        .catch(console.error);
-    } else {
-      appendIndexedCanvasToPortal();
-    }
-  }
-
   private _initViewport() {
     const { service } = this;
 
@@ -434,11 +400,6 @@ export class EdgelessRootBlockComponent extends BlockElement<
     }
 
     this._disposables.add(() => {
-      console.log(
-        service.viewport.centerX,
-        service.viewport.centerY,
-        service.viewport.zoom
-      );
       service.editPropsStore.setStorage('viewport', {
         centerX: service.viewport.centerX,
         centerY: service.viewport.centerY,
@@ -924,7 +885,7 @@ export class EdgelessRootBlockComponent extends BlockElement<
       ([_, widget]) => widget
     );
 
-    return html`${this.host.renderModel(this.surfaceBlockModel)}
+    return html`
       <div class="edgeless-background">
         <div class="edgeless-layer">
           ${this.renderChildren(this.model)}${this.renderChildren(
@@ -948,7 +909,8 @@ export class EdgelessRootBlockComponent extends BlockElement<
       ></edgeless-navigator-black-background>
       <!-- end -->
 
-      <div class="widgets-container">${widgets}</div> `;
+      <div class="widgets-container">${widgets}</div>
+    `;
   }
 }
 

@@ -704,8 +704,6 @@ export class EdgelessRootService extends RootService {
       }
     }
 
-    console.log(bounds);
-
     const [pt, pr, pb, pl] = padding;
     const { viewport } = this;
     let { centerX, centerY, zoom } = viewport;

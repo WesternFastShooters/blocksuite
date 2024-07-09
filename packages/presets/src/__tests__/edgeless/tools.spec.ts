@@ -39,8 +39,8 @@ describe('default tool', () => {
     await wait();
 
     service.viewport.setViewport(1, [
-      surface.renderer.width / 2,
-      surface.renderer.height / 2,
+      service.viewport.width / 2,
+      service.viewport.height / 2,
     ]);
 
     click(edgeless.host, { x: 0, y: 50 });
@@ -59,8 +59,8 @@ describe('default tool', () => {
     await wait();
 
     edgeless.service.viewport.setViewport(1, [
-      surface.renderer.width / 2,
-      surface.renderer.height / 2,
+      edgeless.service.viewport.width / 2,
+      edgeless.service.viewport.height / 2,
     ]);
     await wait();
 
@@ -78,8 +78,8 @@ describe('default tool', () => {
     await wait();
 
     edgeless.service.viewport.setViewport(1, [
-      surface.renderer.width / 2,
-      surface.renderer.height / 2,
+      surface.renderer.viewport.width / 2,
+      surface.renderer.viewport.height / 2,
     ]);
     await wait();
 

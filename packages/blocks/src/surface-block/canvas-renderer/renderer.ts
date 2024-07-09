@@ -1,6 +1,7 @@
 import { DisposableGroup, Slot } from '@blocksuite/global/utils';
 
 import { requestConnectedFrame } from '../../_common/utils/event.js';
+import { last } from '../../_common/utils/iterable.js';
 import type { Viewport } from '../../root-block/edgeless/utils/viewport.js';
 import type { IBound } from '../consts.js';
 import type { SurfaceElementModel } from '../element-model/base.js';
@@ -65,7 +66,11 @@ export class Renderer {
 
   provider: Partial<EnvProvider>;
 
-  stackingCanvasUpdated = new Slot<HTMLCanvasElement[]>();
+  stackingCanvasUpdated = new Slot<{
+    canvases: HTMLCanvasElement[];
+    added: HTMLCanvasElement[];
+    removed: HTMLCanvasElement[];
+  }>();
 
   constructor(options: RendererOptions) {
     const canvas = document.createElement('canvas');
@@ -121,6 +126,12 @@ export class Renderer {
       const canvasLayers = layer.getCanvasLayers().slice(0, -1);
       const canvases = [];
       const currentCanvases = this._stackingCanvas;
+      const lastLayer = last(this.layerManager.layers);
+      const maximumZIndex = lastLayer
+        ? lastLayer.zIndex + lastLayer.elements.length + 1
+        : 1;
+
+      this.canvas.style.zIndex = maximumZIndex.toString();
 
       for (let i = 0; i < canvasLayers.length; ++i) {
         const layer = canvasLayers[i];
@@ -130,7 +141,6 @@ export class Renderer {
           : document.createElement('canvas');
 
         if (!created) {
-          this._stackingCanvas.push(canvas);
           onCreated?.(canvas);
         }
 
@@ -141,7 +151,28 @@ export class Renderer {
 
       this._stackingCanvas = canvases;
       updateStackingCanvasSize(canvases);
-      this.stackingCanvasUpdated.emit(canvases);
+
+      if (currentCanvases.length !== canvases.length) {
+        const diff = canvases.length - currentCanvases.length;
+        const payload: {
+          canvases: HTMLCanvasElement[];
+          removed: HTMLCanvasElement[];
+          added: HTMLCanvasElement[];
+        } = {
+          canvases,
+          removed: [],
+          added: [],
+        };
+
+        if (diff > 0) {
+          payload.added = canvases.slice(-diff);
+        } else {
+          payload.removed = currentCanvases.slice(diff);
+        }
+
+        this.stackingCanvasUpdated.emit(payload);
+      }
+
       this.refresh();
     };
 

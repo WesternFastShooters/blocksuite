@@ -377,10 +377,19 @@ export class EdgelessNoteBlockComponent extends toEdgelessBlockElement(
         }
       })
     );
+    this._disposables.add(
+      this.rootService.layer.slots.layerUpdated.on(() => {
+        this.requestUpdate();
+      })
+    );
+  }
+
+  override toZIndex() {
+    return this.rootService.layer.getZIndex(this.model).toString();
   }
 
   override getRenderingRect() {
-    const { xywh, index, edgeless } = this.model;
+    const { xywh, edgeless } = this.model;
     const { collapse, scale = 1 } = edgeless;
 
     const bound = Bound.deserialize(xywh);
@@ -392,7 +401,7 @@ export class EdgelessNoteBlockComponent extends toEdgelessBlockElement(
       y: bound.y,
       w: width,
       h: collapse ? height : 'inherit',
-      zIndex: this.toZIndex(index),
+      zIndex: this.toZIndex(),
     };
   }
 

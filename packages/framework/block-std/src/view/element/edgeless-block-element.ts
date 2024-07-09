@@ -23,12 +23,12 @@ export abstract class EdgelessBlockElement<
     ) as EdgelessRootService;
   }
 
-  toZIndex(_: string): string {
+  toZIndex(): string {
     return `${1}`;
   }
 
   getRenderingRect() {
-    const { xywh, index } = this.model as BlockModel<{
+    const { xywh } = this.model as BlockModel<{
       xywh: SerializedXYWH;
       index: string;
     }>;
@@ -39,7 +39,7 @@ export abstract class EdgelessBlockElement<
 
     const [x, y, w, h] = JSON.parse(xywh);
 
-    return { x, y, w, h, zIndex: this.toZIndex(index) };
+    return { x, y, w, h, zIndex: this.toZIndex() };
   }
 
   override renderBlock() {
@@ -100,7 +100,7 @@ export function toEdgelessBlockElement<
       ) as EdgelessRootService;
     }
 
-    toZIndex(_: string): string {
+    toZIndex(): string {
       return `${1}`;
     }
 
@@ -111,7 +111,7 @@ export function toEdgelessBlockElement<
       h: number | string;
       zIndex: string;
     } {
-      const { xywh, index } = this.model as BlockModel<{
+      const { xywh } = this.model as BlockModel<{
         xywh: SerializedXYWH;
         index: string;
       }>;
@@ -122,7 +122,7 @@ export function toEdgelessBlockElement<
 
       const [x, y, w, h] = JSON.parse(xywh);
 
-      return { x, y, w, h, zIndex: this.toZIndex(index) };
+      return { x, y, w, h, zIndex: this.toZIndex() };
     }
 
     override renderBlock() {

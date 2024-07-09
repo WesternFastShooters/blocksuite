@@ -19,10 +19,6 @@ import type { SurfaceBlockService } from './surface-service.js';
 import { Bound } from './utils/bound.js';
 import { normalizeWheelDeltaY } from './utils/index.js';
 
-export type IndexedCanvasUpdateEvent = CustomEvent<{
-  content: HTMLCanvasElement[];
-}>;
-
 @customElement('affine-surface')
 export class SurfaceBlockComponent extends BlockElement<
   SurfaceBlockModel,
@@ -42,17 +38,20 @@ export class SurfaceBlockComponent extends BlockElement<
 
   static override styles = css`
     .affine-edgeless-surface-block-container {
-      position: absolute;
       width: 100%;
       height: 100%;
     }
 
     .affine-edgeless-surface-block-container canvas {
+      left: 0;
+      top: 0;
       width: 100%;
       height: 100%;
-      position: relative;
+      position: absolute;
       z-index: 1;
       pointer-events: none;
+      transform-origin: 0 0;
+      transform: var(--canvas-transform);
     }
 
     edgeless-block-portal-container {
@@ -145,10 +144,6 @@ export class SurfaceBlockComponent extends BlockElement<
       },
       onStackingCanvasCreated(canvas) {
         canvas.className = 'indexable-canvas';
-
-        canvas.style.setProperty('transform-origin', '0 0');
-        canvas.style.setProperty('position', 'absolute');
-        canvas.style.setProperty('pointer-events', 'none');
       },
     });
 
@@ -173,8 +168,16 @@ export class SurfaceBlockComponent extends BlockElement<
       this._renderer.dispose();
     });
     this._disposables.add(
-      this._renderer.stackingCanvasUpdated.on(() => {
-        this._emitStackingCanvasUpdate();
+      this._renderer.stackingCanvasUpdated.on(payload => {
+        if (payload.added.length) {
+          this._surfaceContainer.append(...payload.added);
+        }
+
+        if (payload.removed.length) {
+          payload.removed.forEach(canvas => {
+            canvas.remove();
+          });
+        }
       })
     );
   }
@@ -185,14 +188,27 @@ export class SurfaceBlockComponent extends BlockElement<
     this.disposables.add(() => this.themeObserver.dispose());
   };
 
-  private _emitStackingCanvasUpdate() {
-    const evt = new CustomEvent('indexedcanvasupdate', {
-      detail: {
-        content: this._renderer.stackingCanvas,
-      },
-    }) as IndexedCanvasUpdateEvent;
+  private _initCanvasTransform = () => {
+    const refresh = () => {
+      this._surfaceContainer.style.setProperty(
+        '--canvas-transform',
+        this._getReversedTransform()
+      );
+    };
 
-    this.dispatchEvent(evt);
+    this._disposables.add(
+      this.edgeless.service.viewport.viewportUpdated.on(() => {
+        refresh();
+      })
+    );
+
+    refresh();
+  };
+
+  private _getReversedTransform() {
+    const { translateX, translateY, zoom } = this.edgeless.service.viewport;
+
+    return `scale(${1 / zoom}) translate(${-translateX}px, ${-translateY}px)`;
   }
 
   override connectedCallback() {
@@ -211,6 +227,8 @@ export class SurfaceBlockComponent extends BlockElement<
     if (!this._isEdgeless) return;
 
     this._renderer.attach(this._surfaceContainer);
+    this._surfaceContainer.append(...this._renderer.stackingCanvas);
+    this._initCanvasTransform();
   }
 
   refresh() {

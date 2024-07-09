@@ -191,12 +191,23 @@ export class EmbedBlockElement<
 
     if (this.isInSurface) {
       this.style.position = 'absolute';
+      this.rootService &&
+        this._disposables.add(
+          this.rootService.layer.slots.layerUpdated.on(() => {
+            this.requestUpdate();
+          })
+        );
     }
   }
 
   override disconnectedCallback(): void {
     super.disconnectedCallback();
     this._fetchAbortController.abort();
+  }
+
+  toZIndex() {
+    // @ts-ignore
+    return this.rootService?.layer.getZIndex(this.model) ?? 1;
   }
 
   renderEmbed = (children: () => TemplateResult) => {
@@ -231,6 +242,7 @@ export class EmbedBlockElement<
     this.style.top = `${bound.y}px`;
     this.style.width = `${width}px`;
     this.style.height = `${height}px`;
+    this.style.zIndex = `${this.toZIndex()}`;
 
     return html`
       <div

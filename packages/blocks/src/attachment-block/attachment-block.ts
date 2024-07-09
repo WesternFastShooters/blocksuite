@@ -162,6 +162,10 @@ export class AttachmentBlockComponent extends BlockComponent<
     checkAttachmentBlob(this).catch(console.error);
   };
 
+  toZIndex() {
+    return this.rootService?.layer.getZIndex(this.model) ?? 1;
+  }
+
   override connectedCallback() {
     super.connectedCallback();
 
@@ -214,16 +218,28 @@ export class AttachmentBlockComponent extends BlockComponent<
     });
 
     if (this.isInSurface) {
-      this.rootService?.slots.elementResizeStart.on(() => {
-        this._isResizing = true;
-        this._showOverlay = true;
-      });
+      if (this.rootService) {
+        this._disposables.add(
+          this.rootService?.slots.elementResizeStart.on(() => {
+            this._isResizing = true;
+            this._showOverlay = true;
+          })
+        );
 
-      this.rootService?.slots.elementResizeEnd.on(() => {
-        this._isResizing = false;
-        this._showOverlay =
-          this._isResizing || this._isDragging || !this._isSelected;
-      });
+        this._disposables.add(
+          this.rootService.slots.elementResizeEnd.on(() => {
+            this._isResizing = false;
+            this._showOverlay =
+              this._isResizing || this._isDragging || !this._isSelected;
+          })
+        );
+
+        this._disposables.add(
+          this.rootService.layer.slots.layerUpdated.on(() => {
+            this.requestUpdate();
+          })
+        );
+      }
 
       this.style.position = 'absolute';
     }
@@ -274,6 +290,7 @@ export class AttachmentBlockComponent extends BlockComponent<
       this.style.height = `${bound.h}px`;
       this.style.left = `${bound.x}px`;
       this.style.top = `${bound.y}px`;
+      this.style.zIndex = `${this.toZIndex()}`;
     }
 
     const embedView = this._embedView;
