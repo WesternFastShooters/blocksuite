@@ -4,6 +4,7 @@ import { html, type TemplateResult } from 'lit';
 
 import { toast } from '../../../_common/components/index.js';
 import { createSimplePortal } from '../../../_common/components/portal.js';
+import { renderActions } from '../../../_common/components/toolbar/utils.js';
 import { DATABASE_CONVERT_WHITE_LIST } from '../../../_common/configs/quick-action/database-convert-view.js';
 import {
   BoldIcon,
@@ -12,6 +13,8 @@ import {
   CodeIcon,
   CopyIcon,
   DatabaseTableViewIcon20,
+  DeleteIcon,
+  DuplicateIcon,
   Heading1Icon,
   Heading2Icon,
   Heading3Icon,
@@ -21,6 +24,7 @@ import {
   ItalicIcon,
   LinkedDocIcon,
   LinkIcon,
+  MoreVerticalIcon,
   NumberedListIcon,
   QuoteIcon,
   StrikethroughIcon,
@@ -124,25 +128,6 @@ export function toolbarDefaultConfig(toolbar: AffineFormatBarWidget) {
     })
     .addDivider()
     .addHighlighterDropdown()
-    .addDivider()
-    .addInlineAction({
-      id: 'copy',
-      name: 'Copy',
-      icon: CopyIcon,
-      isActive: () => false,
-      action: chain => {
-        chain
-          .getSelectedModels()
-          .with({
-            onCopy: () => {
-              toast(toolbar.host, 'Copied to clipboard');
-            },
-          })
-          .copySelectedModels()
-          .run();
-      },
-      showWhen: () => true,
-    })
     .addDivider()
     .addInlineAction({
       id: 'convert-to-database',
@@ -304,4 +289,90 @@ export function toolbarDefaultConfig(toolbar: AffineFormatBarWidget) {
       name: 'Quote',
       icon: QuoteIcon,
     });
+}
+
+export function toolbarMoreButton(toolbar: AffineFormatBarWidget) {
+  return html`
+    <editor-menu-button
+      .contentPadding=${'8px'}
+      .button=${html`
+        <editor-icon-button aria-label="More" .tooltip=${'More'}>
+          ${MoreVerticalIcon}
+        </editor-icon-button>
+      `}
+    >
+      <div slot data-orientation="vertical">
+        ${renderActions([
+          [
+            {
+              type: 'copy',
+              name: 'Copy',
+              icon: CopyIcon,
+              disabled: toolbar.doc.readonly,
+              handler: () => {
+                toolbar.std.command
+                  .chain()
+                  .getSelectedModels()
+                  .with({
+                    onCopy: () => {
+                      toast(toolbar.host, 'Copied to clipboard');
+                    },
+                  })
+                  .copySelectedModels()
+                  .run();
+              },
+            },
+            {
+              type: 'duplicate',
+              name: 'Duplicate',
+              icon: DuplicateIcon,
+              disabled: toolbar.doc.readonly,
+              handler: () => {
+                toolbar.std.command
+                  .chain()
+                  .getSelectedModels()
+                  .with({
+                    onCopy: () => {
+                      toast(toolbar.host, 'Copied to clipboard');
+                    },
+                  })
+                  .copySelectedModels()
+                  .run();
+              },
+            },
+          ],
+          [
+            {
+              type: 'delete',
+              name: 'Delete',
+              icon: DeleteIcon,
+              disabled: toolbar.doc.readonly,
+              handler: () => {
+                // remove text
+                toolbar.std.command
+                  .chain()
+                  .getTextSelection()
+                  .deleteText()
+                  .run();
+
+                // remove block, image
+                toolbar.std.command
+                  .chain()
+                  .tryAll(chain => [
+                    chain.getBlockSelections(),
+                    chain.getImageSelections(),
+                  ])
+                  .getSelectedModels({
+                    types: ['block', 'image'],
+                  })
+                  .deleteSelectedModels()
+                  .run();
+                toolbar.reset();
+              },
+            },
+          ],
+        ])}
+      </div>
+    </editor-menu-button>
+  `;
 }
