@@ -48,11 +48,16 @@ export class EditorHost extends SignalWatcher(
   private _renderModel = (model: BlockModel): TemplateResult => {
     const { flavour } = model;
     const block = this.doc.getBlock(model.id);
+    // console.log('block:', block);
     if (!block || block.blockViewType === BlockViewType.Hidden) {
       return html`${nothing}`;
     }
     const schema = this.doc.schema.flavourSchemaMap.get(flavour);
-    const view = this.std.getView(flavour);
+    const view = this.std.getView(flavour); // 用flavour（block的名字）得到view，这个view是一个StaticValue，后面也会被当做html标签的名字
+    // console.log('block:', block);
+    // console.log('flavour:', flavour);
+    // console.log('view:', view);
+    // console.log('schema:', schema);
     if (!schema || !view) {
       console.warn(`Cannot find render flavour ${flavour}.`);
       return html`${nothing}`;
@@ -61,7 +66,7 @@ export class EditorHost extends SignalWatcher(
       WidgetViewMapIdentifier(flavour)
     );
 
-    const tag = typeof view === 'function' ? view(model) : view;
+    const tag = typeof view === 'function' ? view(model) : view; // staticvalue就是被封装的字符串
     const widgets: Record<string, TemplateResult> = widgetViewMap
       ? Object.entries(widgetViewMap).reduce((mapping, [key, tag]) => {
           const template = html`<${tag} ${unsafeStatic(WIDGET_ID_ATTR)}=${key}></${tag}>`;
@@ -72,11 +77,12 @@ export class EditorHost extends SignalWatcher(
           };
         }, {})
       : {};
-
+    console.log('widgets:', widgets);
+    // console.log('tag:', tag);
     return html`<${tag}
       ${unsafeStatic(BLOCK_ID_ATTR)}=${model.id}
       .widgets=${widgets}
-      .viewType=${block.blockViewType}
+      .viewType=${block.blockViewType} // viewType就那三个枚举 bypass hidden display
     ></${tag}>`;
   };
 
@@ -95,10 +101,14 @@ export class EditorHost extends SignalWatcher(
     model: BlockModel,
     filter?: (model: BlockModel) => boolean
   ): TemplateResult => {
+    /* 渲染子元素，比如 affine:paragraph这种 */
     return html`${repeat(
       model.children.filter(filter ?? (() => true)),
       child => child.id,
-      child => this._renderModel(child)
+      child => {
+        // console.log('child:', child?.flavour);
+        return this._renderModel(child);
+      }
     )}`;
   };
 
@@ -186,7 +196,7 @@ export class EditorHost extends SignalWatcher(
   override render() {
     const { root } = this.doc;
     if (!root) return nothing;
-
+    console.log('root:', root?.flavour);
     return this._renderModel(root);
   }
 

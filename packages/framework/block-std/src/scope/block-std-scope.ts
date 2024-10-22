@@ -121,7 +121,9 @@ export class BlockStdScope {
     internalExtensions.forEach(ext => {
       const container = this.container;
       ext.setup(container);
+      //  setup: di => {di.addImpl(BlockViewIdentifier(flavour), () => view);},
     });
+    // console.log('this.container:', this.container);
 
     this.userExtensions.forEach(ext => {
       const container = this.container;
@@ -172,6 +174,7 @@ export class BlockStdScope {
 
   render() {
     const element = new EditorHost();
+    /* 得到完整html */
     element.std = this;
     element.doc = this.doc;
     this._getHost = () => element;

@@ -117,6 +117,7 @@ export class Container {
    * @see {@link ContainerEditor.addImpl}
    */
   get addImpl() {
+    // 让container
     return new ContainerEditor(this).addImpl;
   }
 
@@ -164,6 +165,8 @@ export class Container {
     factory: ServiceFactory<T>,
     { scope, override }: { scope?: ServiceScope; override?: boolean } = {}
   ) {
+/* addFactory的作用上让container的services被赋值 */
+
     // convert scope to string
     const normalizedScope = stringifyScope(scope ?? ROOT_SCOPE);
     const normalizedIdentifier = parseIdentifier(identifier);
@@ -328,8 +331,8 @@ class ContainerEditor {
       : [],
     Arg3 extends Deps = Deps,
   >(
-    identifier: Arg1,
-    arg2: Arg2,
+    identifier: Arg1, // 标识符 { variant,identifierName }
+    arg2: Arg2, //  ()=>被包装的字符串 字符串后续会成为标签的名字
     ...[arg3]: Arg3 extends [] ? [] : [Arg3]
   ): this => {
     if (arg2 instanceof Function) {

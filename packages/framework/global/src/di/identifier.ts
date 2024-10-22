@@ -11,26 +11,26 @@ import { DEFAULT_SERVICE_VARIANT } from './consts.js';
 import { stableHash } from './stable-hash.js';
 
 /**
- * create a ServiceIdentifier.
+ * 创建一个 ServiceIdentifier。
  *
- * ServiceIdentifier is used to identify a certain type of service. With the identifier, you can reference one or more services
- * without knowing the specific implementation, thereby achieving
- * [inversion of control](https://en.wikipedia.org/wiki/Inversion_of_control).
+ * ServiceIdentifier 用于标识某种类型的服务。通过标识符，你可以引用一个或多个服务
+ * 而无需知道具体的实现，从而实现
+ * [控制反转](https://en.wikipedia.org/wiki/Inversion_of_control)。
  *
  * @example
  * ```ts
- * // define a interface
+ * // 定义一个接口
  * interface Storage {
  *   get(key: string): string | null;
  *   set(key: string, value: string): void;
  * }
  *
- * // create a identifier
- * // NOTICE: Highly recommend to use the interface name as the identifier name,
- * // so that it is easy to understand. and it is legal to do so in TypeScript.
+ * // 创建一个标识符
+ * // 注意：强烈建议使用接口名作为标识符名称，
+ * // 这样易于理解。在 TypeScript 中这样做是合法的。
  * const Storage = createIdentifier<Storage>('Storage');
  *
- * // create a implementation
+ * // 创建一个实现
  * class LocalStorage implements Storage {
  *   get(key: string): string | null {
  *     return localStorage.getItem(key);
@@ -40,26 +40,26 @@ import { stableHash } from './stable-hash.js';
  *   }
  * }
  *
- * // register the implementation to the identifier
+ * // 将实现注册到标识符
  * services.addImpl(Storage, LocalStorage);
  *
- * // get the implementation from the identifier
+ * // 从标识符获取实现
  * const storage = services.provider().get(Storage);
  * storage.set('foo', 'bar');
  * ```
  *
- * With identifier:
+ * 使用标识符的好处：
  *
- * * You can easily replace the implementation of a `Storage` without changing the code that uses it.
- * * You can easily mock a `Storage` for testing.
+ * * 你可以轻松替换 `Storage` 的实现，而无需更改使用它的代码。
+ * * 你可以轻松地为测试模拟一个 `Storage`。
  *
- * # Variant
+ * # 变体
  *
- * Sometimes, you may want to register multiple implementations for the same interface.
- * For example, you may want have both `LocalStorage` and `SessionStorage` for `Storage`,
- * and use them in same time.
+ * 有时，你可能想为同一个接口注册多个实现。
+ * 例如，你可能想同时拥有 `LocalStorage` 和 `SessionStorage` 作为 `Storage`，
+ * 并同时使用它们。
  *
- * In this case, you can use `variant` to distinguish them.
+ * 在这种情况下，你可以使用 `variant` 来区分它们。
  *
  * ```ts
  * const Storage = createIdentifier<Storage>('Storage');
@@ -69,14 +69,14 @@ import { stableHash } from './stable-hash.js';
  * services.addImpl(LocalStorage, LocalStorageImpl);
  * services.addImpl(SessionStorage, SessionStorageImpl);
  *
- * // get the implementation from the identifier
+ * // 从标识符获取实现
  * const localStorage = services.provider().get(LocalStorage);
  * const sessionStorage = services.provider().get(SessionStorage);
  * const storage = services.provider().getAll(Storage); // { local: LocalStorageImpl, session: SessionStorageImpl }
  * ```
  *
- * @param name unique name of the identifier.
- * @param variant The default variant name of the identifier, can be overridden by `identifier("variant")`.
+ * @param name 标识符的唯一名称。
+ * @param variant 标识符的默认变体名称，可以通过 `identifier("variant")` 覆盖。
  */
 export function createIdentifier<T>(
   name: string,
@@ -87,8 +87,9 @@ export function createIdentifier<T>(
       return createIdentifier<T>(name, variant);
     },
     {
-      identifierName: name,
-      variant,
+      /* 这两个是重点消费对象， */
+      identifierName: name, // 基本名称
+      variant, // 变体名称
     }
   ) as never;
 }

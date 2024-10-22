@@ -31,3 +31,15 @@ export function BlockViewExtension(
     },
   };
 }
+
+/* 
+  identifierName: name,
+      variant,
+*/
+
+/* 
+调用的时候 BlockViewExtension('affine:divider', literal`affine-divider`),
+affine:divider 表示block的name
+literal`affine-divider` 表示view 性质是被包装的字符串 
+()=>被包装的字符串 字符串后续会成为标签的名字
+*/

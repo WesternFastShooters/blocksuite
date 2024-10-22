@@ -24,6 +24,7 @@ export class DividerBlockComponent extends CaptionedBlockComponent<DividerBlockM
   }
 
   override renderBlock() {
+    // this.model是模型-视图这个概念中的数据，是proxy类型 来自于doc
     const children = html`<div
       class="affine-block-children-container"
       style="padding-left: ${BLOCK_CHILDREN_CONTAINER_PADDING_LEFT}px"

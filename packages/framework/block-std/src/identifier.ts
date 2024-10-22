@@ -20,6 +20,7 @@ export const ConfigIdentifier =
   createIdentifier<Record<string, unknown>>('Config');
 
 export const BlockViewIdentifier = createIdentifier<BlockViewType>('BlockView');
+// console.log(BlockViewIdentifier.identifierName, BlockViewIdentifier.variant);
 
 export const WidgetViewMapIdentifier =
   createIdentifier<WidgetViewMapType>('WidgetViewMap');
