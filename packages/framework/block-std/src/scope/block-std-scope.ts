@@ -174,14 +174,14 @@ export class BlockStdScope {
 
   render() {
     const element = new EditorHost();
-    /* 得到完整html */
+    console.log('element1:', element);
     element.std = this;
     element.doc = this.doc;
     this._getHost = () => element;
     this._lifeCycleWatchers.forEach(watcher => {
       watcher.rendered.call(watcher);
     });
-
+    console.log('element2:', element);
     return element;
   }
 

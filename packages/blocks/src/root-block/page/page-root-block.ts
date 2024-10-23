@@ -427,7 +427,7 @@ export class PageRootBlockComponent extends BlockComponent<
       // Should remove deprecated `hidden` property in the future
       return !(isNote && displayOnEdgeless);
     });
-
+    console.log('page-root-block children:', children);
     return html`
       <div class="affine-page-root-block-container">${children} ${widgets}</div>
     `;

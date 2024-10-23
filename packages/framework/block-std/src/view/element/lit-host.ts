@@ -77,12 +77,13 @@ export class EditorHost extends SignalWatcher(
           };
         }, {})
       : {};
-    console.log('widgets:', widgets);
+    // console.log('widgets:', widgets);
     // console.log('tag:', tag);
+    // viewType就那三个枚举 bypass hidden display
     return html`<${tag}
       ${unsafeStatic(BLOCK_ID_ATTR)}=${model.id}
       .widgets=${widgets}
-      .viewType=${block.blockViewType} // viewType就那三个枚举 bypass hidden display
+      .viewType=${block.blockViewType}
     ></${tag}>`;
   };
 
@@ -196,7 +197,7 @@ export class EditorHost extends SignalWatcher(
   override render() {
     const { root } = this.doc;
     if (!root) return nothing;
-    console.log('root:', root?.flavour);
+    console.log('shit:', root.flavour, this.std.getView(root.flavour));
     return this._renderModel(root);
   }
 
