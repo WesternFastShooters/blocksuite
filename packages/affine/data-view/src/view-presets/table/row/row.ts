@@ -167,6 +167,13 @@ export class TableRow extends SignalWatcher(WithDisposable(ShadowlessElement)) {
 
   protected override render(): unknown {
     const view = this.view;
+    console.log(
+      'view.properties$.value:',
+      view.properties$.value[0].view.manager.dataSource.cellValueGet,
+      'view.properties$.value:',
+      view.properties$.value
+    );
+
     return html`
       ${view.readonly$.value
         ? nothing
@@ -191,9 +198,9 @@ export class TableRow extends SignalWatcher(WithDisposable(ShadowlessElement)) {
             </div>
           </div>`}
       ${repeat(
-        view.properties$.value,
+        view.properties$.value, // table row的数据源  ,怎么获取单元格数据 view.properties$.value[0].valueGet(this.rowId)  ， 0 1 2 ... 指的是第0列，第1列
         v => v.id,
-        (column, i) => {
+        (column /* 单元格数据 */, i) => {
           const clickDetail = () => {
             if (!this.selectionController) {
               return;

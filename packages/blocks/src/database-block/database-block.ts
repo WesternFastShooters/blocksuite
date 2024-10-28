@@ -148,7 +148,7 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<
     });
   };
 
-  private _dataSource?: DatabaseBlockDataSource;
+  private _dataSource?: DatabaseBlockDataSource; // 数据藏身地
 
   private dataView = new DataView();
 
@@ -206,6 +206,7 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<
 
   indicator = new DragIndicator();
 
+  // 目前暂无发现这个函数有调用的地方
   onDrag = (evt: MouseEvent, id: string): (() => void) => {
     const result = getDropResult(evt);
     if (result && result.rect) {
@@ -283,10 +284,11 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<
     return databaseSelection?.viewSelection;
   });
 
-  virtualPadding$ = signal(0);
+  virtualPadding$ = signal(0); // 涉及数据表table模式和kanban模式的margin、padding
 
   get dataSource(): DatabaseBlockDataSource {
     if (!this._dataSource) {
+      console.log('table得到数据:', this.model.cells$.value);
       this._dataSource = new DatabaseBlockDataSource(this.model);
       this._dataSource.contextSet(HostContextKey, this.host);
     }
@@ -364,6 +366,7 @@ export class DatabaseBlockComponent extends CaptionedBlockComponent<
           std: this.std,
           detailPanelConfig: {
             openDetailPanel: (target, data) => {
+              // 这个东西是行详情，就是那个modal弹窗
               const template = createRecordDetail({
                 ...data,
                 detail: {

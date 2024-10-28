@@ -54,7 +54,7 @@ import {
 export class DatabaseBlockDataSource extends DataSourceBase {
   private _batch = 0;
 
-  private readonly _model: DatabaseBlockModel;
+  private readonly _model: DatabaseBlockModel; // 数据藏身地  _model.cells$.value
 
   override featureFlags$: ReadonlySignal<DatabaseFlags> = computed(() => {
     return {
@@ -99,6 +99,7 @@ export class DatabaseBlockDataSource extends DataSourceBase {
 
   constructor(model: DatabaseBlockModel) {
     super();
+    console.log('数据源:', model.cells$.value);
     this._model = model;
   }
 

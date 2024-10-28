@@ -135,6 +135,7 @@ export class DataViewRenderer extends SignalWatcher(
     if (!viewData) {
       return;
     }
+    // console.log('this.config.dataSource:', this.config.dataSource);
     const props: DataViewProps = {
       dataViewEle: this,
       headerWidget: this.config.headerWidget,
@@ -151,7 +152,7 @@ export class DataViewRenderer extends SignalWatcher(
     return keyed(
       viewData.view.id,
       renderUniLit(
-        viewData.view.meta.renderer.view,
+        viewData.view.meta.renderer.view, // 就是createUniComponentFromWebComponent这个函数的回调
         { props },
         {
           ref: this._view,

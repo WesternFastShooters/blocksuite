@@ -98,6 +98,7 @@ export class UniLit<
   accessor uni: UniComponent<Props, Expose> | undefined = undefined;
 }
 
+// 做渲染的函数
 export const createUniComponentFromWebComponent = <
   T,
   Expose extends NonNullable<unknown> = NonNullable<unknown>,

@@ -154,6 +154,7 @@ export class TableGroup extends SignalWatcher(
           ids,
           id => id,
           (id, idx) => {
+            // this.view 包含行数据
             return html`<data-view-table-row
               data-row-index="${idx}"
               data-row-id="${id}"
