@@ -55,7 +55,11 @@ import {
   TextCell,
   TextCellEditing,
 } from './property-presets/text/cell-renderer.js';
-import { DataViewKanban, DataViewTable } from './view-presets/index.js';
+import {
+  DataViewGantt,
+  DataViewKanban,
+  DataViewTable,
+} from './view-presets/index.js';
 import { KanbanCard } from './view-presets/kanban/card.js';
 import { KanbanCell } from './view-presets/kanban/cell.js';
 import { KanbanGroup } from './view-presets/kanban/group.js';
@@ -179,6 +183,7 @@ export function effects() {
   );
   customElements.define('affine-data-view-kanban', DataViewKanban);
   customElements.define('affine-data-view-kanban-header', KanbanHeader);
+  customElements.define('affine-data-view-gantt', DataViewGantt);
   customElements.define('variable-ref-view', VariableRefView);
   customElements.define('affine-data-view-record-detail', RecordDetail);
   customElements.define('filter-root-view', FilterRootView);
