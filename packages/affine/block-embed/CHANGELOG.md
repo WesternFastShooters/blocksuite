@@ -1,5 +1,150 @@
 # @blocksuite/affine-block-embed
 
+## 0.17.28
+
+### Patch Changes
+
+- 5ef420d: ## Feat
+
+  - feat(blocks): mobile at menu (#8681)
+  - feat: unify the reference data structure of inline, card and embed (#8689)
+  - feat(database): add placeholder for filter (#8701)
+  - feat(database): support for sorting event tracking (#8691)
+
+  ## Fix
+
+  - fix: color of button is actived on color picker (#8685)
+  - fix: unable to switch to embed view when other pages link with mode (#8688)
+  - fix: the shape will turn black for a moment when dragging from the toolbar (#8698)
+  - fix(database): support for pasting linked doc into title cell (#8703)
+  - fix(database): menu cannot be close when it outside the doc (#8700)
+  - fix(database): number overflow (#8699)
+  - fix(database): prevent certain event propagation in the menu input (#8697)
+  - fix(database): toolbar icon color (#8695)
+  - fix(database): textarea of the title has unexpected line breaks (#8694)
+  - fix(database): can't create tag by clicking (#8693)
+  - fix(database): sorting of checkbox (#8692)
+  - fix: add paragraph when last block in note is not empty paragraph (#8690)
+  - fix: improve drag area (#8678)
+  - fix: edgeless crash on mobile safari (#8680)
+
+  ## Chore
+
+  - chore: lock file maintenance (#8686)
+
+  ## Refactor
+
+  - refactor(blocks): extract computation of selection rect to command (#8705)
+  - refactor(blocks): render linked doc popover with blocksuite-portal (#8664)
+  - refactor(blocks): move virutal keyboard controller to affine components (#8663)
+  - refactor(database): remove sortable.js (#8696)
+
+  ## Other
+
+  - Introducing BlockSuite Guru on Gurubase.io (#8706)
+
+- Updated dependencies [5ef420d]
+  - @blocksuite/affine-block-surface@0.17.28
+  - @blocksuite/affine-components@0.17.28
+  - @blocksuite/affine-model@0.17.28
+  - @blocksuite/affine-shared@0.17.28
+  - @blocksuite/block-std@0.17.28
+  - @blocksuite/global@0.17.28
+  - @blocksuite/inline@0.17.28
+  - @blocksuite/store@0.17.28
+
+## 0.17.27
+
+### Patch Changes
+
+- f70b950: fix: color of canvas element under embed dark theme whiteboard is wrong (#8677)
+
+  ## Fix
+
+  - fix: color of canvas element under embed dark theme whiteboard is wrong (#8677)
+  - fix(edgeless): tool controller potential problem (#8675)
+  - fix: typeError: f.\_def.innerType.shape[e] is undefined (#8676)
+  - fix: whiteboard is first loaded, size of the linked doc card is scaled to wrong size (#8674)
+
+- Updated dependencies [f70b950]
+  - @blocksuite/affine-block-surface@0.17.27
+  - @blocksuite/affine-components@0.17.27
+  - @blocksuite/affine-model@0.17.27
+  - @blocksuite/affine-shared@0.17.27
+  - @blocksuite/block-std@0.17.27
+  - @blocksuite/global@0.17.27
+  - @blocksuite/inline@0.17.27
+  - @blocksuite/store@0.17.27
+
+## 0.17.26
+
+### Patch Changes
+
+- cfa436e: ## Feat
+
+  - feat: add pdf viewer to playground (#8650)
+  - feat: add view toggle menu to toolbar of attachment block (#8660)
+  - feat: attachment embedded view supports configurable (#8658)
+
+  ## Fix
+
+  - fix: tidy up after multiple images uploaded (#8671)
+  - fix: unable to add caption for linked document of embedded view (#8670)
+  - fix(blocks): code block should update highlight when theme changed (#8669)
+  - fix(edgeless): allow right click of tool controller (#8652)
+  - fix(database): short name of tag type (#8665)
+  - fix: the content of formula should contain spaces (#8647)
+  - fix: import notion database with title (#8661)
+  - fix(page): bookmark block selected style (#8656)
+  - fix(edgeless): switching shape style and color, the preview does not change in time (#8655)
+  - fix(blocks): size of icons are not consistent in keyboard toolbar (#8653)
+  - fix: use host instead of offsetParent (#8651)
+
+  ## Refactor
+
+  - refactor(database): filter ui (#8611)
+
+  ## Ci
+
+  - ci: renovate pr title lint (#8666)
+
+- Updated dependencies [cfa436e]
+  - @blocksuite/affine-block-surface@0.17.26
+  - @blocksuite/affine-components@0.17.26
+  - @blocksuite/affine-model@0.17.26
+  - @blocksuite/affine-shared@0.17.26
+  - @blocksuite/block-std@0.17.26
+  - @blocksuite/global@0.17.26
+  - @blocksuite/inline@0.17.26
+  - @blocksuite/store@0.17.26
+
+## 0.17.25
+
+### Patch Changes
+
+- 4d0bd4c: fix(blocks): reset keyboard toolbar after blur (#8646)
+
+  ## Fix
+
+  - fix(blocks): reset keyboard toolbar after blur (#8646)
+  - fix: scale note and edgeless-text when resize and align elements (#8642)
+  - fix(edgeless): can not insert link when no selection (#8644)
+  - fix(database): prevent 0 in number cells from getting rendered as an empty string (#8629)
+
+  ## Refactor
+
+  - refactor(blocks): provide position controll config for keyboard toolbar (#8645)
+
+- Updated dependencies [4d0bd4c]
+  - @blocksuite/affine-block-surface@0.17.25
+  - @blocksuite/affine-components@0.17.25
+  - @blocksuite/affine-model@0.17.25
+  - @blocksuite/affine-shared@0.17.25
+  - @blocksuite/block-std@0.17.25
+  - @blocksuite/global@0.17.25
+  - @blocksuite/inline@0.17.25
+  - @blocksuite/store@0.17.25
+
 ## 0.17.24
 
 ### Patch Changes
