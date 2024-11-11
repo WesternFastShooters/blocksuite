@@ -175,7 +175,7 @@ export function mockPeekViewExtension(
       }
 
       alert('Peek view not implemented in playground');
-      console.log('peek', element, options);
+
 
       return Promise.resolve();
     },

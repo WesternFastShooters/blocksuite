@@ -1,9 +1,20 @@
-import { viewType } from '../../core/view/data-view.js';
+import { type BasicViewDataType, viewType } from '../../core/view/data-view.js';
 import { GanttSingleView } from './gantt-view-manager.js';
 
-export const ganttViewType = viewType('gantt');
+export const GanttViewType = viewType('gantt');
 
-export const ganttViewModel = ganttViewType.createModel({
+export type GanttViewColumn = {};
+
+type DataType = {
+  columns: GanttViewColumn[];
+};
+
+export type GanttViewData = BasicViewDataType<
+  typeof GanttViewType.type,
+  DataType
+>;
+
+export const ganttViewModel = GanttViewType.createModel({
   defaultName: 'Gantt View',
   dataViewManager: GanttSingleView,
   defaultData: viewManager => {

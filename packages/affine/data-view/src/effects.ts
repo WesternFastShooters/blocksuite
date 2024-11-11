@@ -39,6 +39,9 @@ import {
   TextCell,
   TextCellEditing,
 } from './property-presets/text/cell-renderer.js';
+import { GanttChart } from './view-presets/gantt/gantt-chart.js';
+import { GanttChartBackground } from './view-presets/gantt/gantt-chart-background.js';
+import { GanttChartHeader } from './view-presets/gantt/gantt-header.js';
 import {
   DataViewGantt,
   DataViewKanban,
@@ -128,6 +131,7 @@ export function effects() {
   customElements.define('filter-bar', FilterBar);
   customElements.define('data-view-group-title-number-view', NumberGroupView);
   customElements.define('affine-data-view-kanban-cell', KanbanCell);
+
   customElements.define('affine-lit-icon', AffineLitIcon);
   customElements.define('filter-condition-view', FilterConditionView);
   customElements.define('data-view-group-setting', GroupSetting);
@@ -161,6 +165,9 @@ export function effects() {
   customElements.define('affine-data-view-kanban', DataViewKanban);
   customElements.define('affine-data-view-kanban-header', KanbanHeader);
   customElements.define('affine-data-view-gantt', DataViewGantt);
+  customElements.define('affine-gantt-chart-background', GanttChartBackground);
+  customElements.define('affine-gantt-chart', GanttChart);
+  customElements.define('affine-gantt-chart-header', GanttChartHeader);
   customElements.define('variable-ref-view', VariableRefView);
   customElements.define('affine-data-view-record-detail', RecordDetail);
   customElements.define('filter-root-view', FilterRootView);

@@ -12,6 +12,7 @@ import { KanbanGroup } from '../group.js';
 
 export class KanbanDragController implements ReactiveController {
   dragStart = (ele: KanbanCard, evt: PointerEvent) => {
+    console.log('evt:', evt);
     const eleRect = ele.getBoundingClientRect();
     const offsetLeft = evt.x - eleRect.left;
     const offsetTop = evt.y - eleRect.top;
@@ -91,6 +92,7 @@ export class KanbanDragController implements ReactiveController {
   ):
     | { group: KanbanGroup; card?: KanbanCard; position: InsertToPosition }
     | undefined => {
+    console.log('evt2');
     const eles = document.elementsFromPoint(evt.x, evt.y);
     const target = eles.find(v => v instanceof KanbanGroup) as KanbanGroup;
     if (target) {
@@ -141,6 +143,7 @@ export class KanbanDragController implements ReactiveController {
     }
     this.host.disposables.add(
       this.host.props.handleEvent('dragStart', context => {
+        console.log('shit2');
         const event = context.get('pointerState').raw;
         const target = event.target;
         if (target instanceof Element) {
@@ -161,6 +164,7 @@ export class KanbanDragController implements ReactiveController {
 }
 
 const createDragPreview = (card: KanbanCard, x: number, y: number) => {
+  console.log('shit');
   const preOpacity = card.style.opacity;
   card.style.opacity = '0.5';
   const div = document.createElement('div');
