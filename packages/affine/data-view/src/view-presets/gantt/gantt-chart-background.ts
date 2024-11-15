@@ -11,7 +11,7 @@ import { css } from 'lit';
 import { property, query } from 'lit/decorators.js';
 import { html } from 'lit/static-html.js';
 
-import { ganttChartContext } from './gantt-chart.js';
+import type { GanttSingleView } from './gantt-view-manager.js';
 
 const styles = css`
   .canvasContainer {
@@ -37,48 +37,47 @@ export class GanttChartBackground extends SignalWatcher(
   }
 
   private get todayPos() {
-    return getHours(startOfToday()) * 12 * this.pxPerMs[this.period];
+    return getHours(startOfToday()) * 12 * this.view.pxPerMs[this.view.period];
   }
 
   private drawCanvas() {
     const canvas = this.canvas;
     if (!canvas) return;
-    canvas.width = (this.viewPortSize.width || 0) * this.ratio;
-    canvas.height = (this.viewPortSize.height || 0) * this.ratio;
+    canvas.width = (this.view.viewPortSize.width || 0) * this.ratio;
+    canvas.height = (this.view.viewPortSize.height || 0) * this.ratio;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     ctx.scale(this.ratio, this.ratio);
     ctx.clearRect(
       0,
       0,
-      this.viewPortSize.width || 0,
-      this.viewPortSize.height || 0
+      this.view.viewPortSize.width || 0,
+      this.view.viewPortSize.height || 0
     );
     ctx.strokeStyle = '#f4f4f4';
     const appTheme = this.std.get(ThemeProvider).app$.value;
     ctx.fillStyle = appTheme === 'dark' ? '#222222' : '#F7F7F7';
-    this.timeAxisRange.minor.forEach(
+    this.view.timeAxisRange.minor.forEach(
       (time: { isWeekend: boolean; startPosition: number }) => {
-        if (this.period === 'day' && time.isWeekend) {
+        if (this.view.period === 'day' && time.isWeekend) {
           this.drawWeekends(
             ctx,
             time.startPosition - (this.referencePosition || 0),
-            this.viewPortSize.height || 0,
-            this.dayWidth
+            this.view.viewPortSize.height || 0
           );
         }
         this.drawLine(
           ctx,
-          time.startPosition - (this.referencePosition || 0),
-          this.viewPortSize.height || 0
+          time.startPosition - (this.view.referencePosition || 0),
+          this.view.viewPortSize.height || 0
         );
       }
     );
     ctx.strokeStyle = '#1677ff';
     this.drawLine(
       ctx,
-      this.todayPos - (this.referencePosition || 0),
-      this.viewPortSize.height || 0
+      this.todayPos - (this.view.referencePosition || 0),
+      this.view.viewPortSize.height || 0
     );
   }
 
@@ -92,17 +91,16 @@ export class GanttChartBackground extends SignalWatcher(
   private drawWeekends(
     ctx: CanvasRenderingContext2D,
     x: number,
-    height: number,
-    dayWidth: number
+    height: number
   ) {
-    ctx.fillRect(x, 0, dayWidth, height);
+    ctx.fillRect(x, 0, 30, height);
   }
 
   override render() {
     return html`
       <div class="canvasContainer">
         <canvas
-          style="width: ${this.viewPortSize.width}px; height: ${this
+          style="width: ${this.view.viewPortSize.width}px; height: ${this.view
             .viewPortSize.height}px;"
         ></canvas>
       </div>
@@ -116,9 +114,9 @@ export class GanttChartBackground extends SignalWatcher(
       changedProperties.has('timeAxisRange')
     ) {
       if (
-        this.referencePosition === undefined ||
-        this.viewPortSize.width === 0 ||
-        this.timeAxisRange.minor.length === 0
+        this.view.referencePosition === undefined ||
+        this.view.viewPortSize.width === 0 ||
+        this.view.timeAxisRange.minor.length === 0
       )
         return;
       requestAnimationFrame(() => this.drawCanvas());
@@ -128,29 +126,11 @@ export class GanttChartBackground extends SignalWatcher(
   @query('canvas')
   accessor canvas!: HTMLCanvasElement;
 
-  @property({ type: Number })
-  accessor dayWidth = 30;
-
-  @consume({ context: ganttChartContext })
-  accessor period: 'day' | 'month' | 'week' = 'day';
-
-  @consume({ context: ganttChartContext })
-  accessor pxPerMs!: { month: number; week: number; day: number };
-
-  @consume({ context: ganttChartContext })
-  accessor referencePosition = 0;
-
   @consume({ context: stdContext })
   accessor std!: BlockStdScope;
 
-  @consume({ context: ganttChartContext })
-  accessor timeAxisRange = { major: [], minor: [] };
-
-  @property({ type: Object })
-  accessor viewPortSize = { width: 0, height: 0 };
-
-  @property({ type: String })
-  accessor weekendBgColor = '#fafafa';
+  @property({ attribute: false })
+  accessor view!: GanttSingleView;
 }
 
 declare global {

@@ -1,6 +1,8 @@
 import { css } from 'lit';
 import { html } from 'lit/static-html.js';
 
+import type { GanttSingleView } from './gantt-view-manager.js';
+
 import { type DataViewInstance, renderUniLit } from '../../core/index.js';
 import { DataViewBase } from '../../core/view/data-view-base.js';
 
@@ -32,7 +34,11 @@ export class DataViewGantt extends DataViewBase {
       ${renderUniLit(this.props.headerWidget, {
         dataViewInstance: this.expose,
       })}
-      <div class="gantt-chart-layout" .view="${this.props.view}">gantt</div>
+      <div class="gantt-chart-layout">
+        <affine-gantt-chart
+          .view="${this.props.view as GanttSingleView}"
+        ></affine-gantt-chart>
+      </div>
     `;
   }
 }

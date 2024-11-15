@@ -6,7 +6,10 @@ import { SingleViewBase } from '../../core/view-manager/single-view.js';
 export const DAY_IN_MS = 1000 * 60 * 60 * 24;
 
 export class GanttSingleView extends SingleViewBase<GanttViewData> {
-  jumpToTime = (targetTime?: number, position?: 'left' | 'right' | 'middle') => {
+  jumpToTime = (
+    targetTime?: number,
+    position?: 'left' | 'right' | 'middle'
+  ) => {
     const targetPosition = targetTime ?? Date.now();
 
     if (position === 'left') {
@@ -55,35 +58,6 @@ export class GanttSingleView extends SingleViewBase<GanttViewData> {
   timeAxisRange = { major: [], minor: [] };
 
   viewPortSize = { width: 0, height: 0 };
-
-  /* 
-    const jumpToTime = useCallback(
-    (targetTime?: Dayjs, position?: 'left' | 'right' | 'middle') => {
-      let targetPosition = targetTime?.valueOf() ?? Date.now();
-
-      if (position === 'left') {
-        setPositionRange({
-          start: targetPosition * pxPerMs[period],
-          end: targetPosition * pxPerMs[period] + viewPortSize?.width,
-        });
-        return;
-      }
-      if (position === 'right') {
-        setPositionRange({
-          start: targetPosition * pxPerMs[period] - viewPortSize?.width,
-          end: targetPosition * pxPerMs[period],
-        });
-        return;
-      }
-
-      setPositionRange({
-        start: targetPosition * pxPerMs[period] - viewPortSize?.width / 2,
-        end: targetPosition * pxPerMs[period] + viewPortSize?.width / 2,
-      });
-    },
-    [viewPortSize, period],
-  );
-  */
 
   get type(): string {
     return this.view?.mode ?? 'gantt';

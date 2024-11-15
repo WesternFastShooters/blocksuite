@@ -1,3 +1,8 @@
+import {
+  menu,
+  popMenu,
+  popupTargetFromElement,
+} from '@blocksuite/affine-components/context-menu';
 import { ShadowlessElement } from '@blocksuite/block-std';
 import { SignalWatcher, WithDisposable } from '@blocksuite/global/utils';
 import { css } from 'lit';
@@ -122,6 +127,22 @@ export class GanttChartHeader extends SignalWatcher(
 ) {
   static override styles = styles;
 
+  clickSwitchPeriod = (e: MouseEvent) => {
+    e.stopPropagation();
+    popMenu(popupTargetFromElement(e.currentTarget as HTMLElement), {
+      options: {
+        items: ['day', 'week', 'month'].map(period =>
+          menu.action({
+            name: period,
+            select: () => {
+              this.view.period = period as 'day' | 'week' | 'month';
+            },
+          })
+        ),
+      },
+    });
+  };
+
   private get todayItemPosition() {
     return 12 * this.view.pxPerMs[this.view.period] - 11;
   }
@@ -175,12 +196,18 @@ export class GanttChartHeader extends SignalWatcher(
             >
               Today
             </div>
-            <div role="button" tabindex="0" class="select-period-button">
+            <div
+              role="button"
+              tabindex="0"
+              class="select-period-button"
+              @click=${this.clickSwitchPeriod}
+            >
               ${{
                 day: 'day',
                 week: 'week',
                 month: 'month',
-              }[this.view.period]}<svg
+              }[this.view.period]}
+              <svg
                 role="graphics-symbol"
                 viewBox="0 0 30 30"
                 class="chevronDown"
