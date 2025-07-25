@@ -24,7 +24,8 @@ export default defineConfig({
     lib: {
       entry: resolve(__dirname, 'apps/vscode-integration/main.ts'),
       name: 'BlockSuiteVSCodeIntegration',
-      fileName: 'blocksuite-bundle',
+      // 将 JavaScript bundle 命名为 index.js
+      fileName: (format) => `index.js`,
       formats: ['es'],
     },
     rollupOptions: {
@@ -34,6 +35,15 @@ export default defineConfig({
         // 确保所有代码都打包在一个文件中
         inlineDynamicImports: true,
         manualChunks: undefined,
+        // 将 CSS 输出文件命名为 style.css
+        assetFileNames: (assetInfo) => {
+          // 如果是主 CSS 文件，将其命名为 style.css
+          if (assetInfo.name && assetInfo.name.endsWith('.css')) {
+            return 'style.css';
+          }
+          // 对于其他资源（如图片等），使用默认命名
+          return 'assets/[name][extname]';
+        },
       },
     },
     // 确保构建输出目录
