@@ -1,25 +1,26 @@
-import '../../style.css';
+import './style.css';
 import { effects as itEffects } from '@blocksuite/integration-test/effects';
-import { getTestStoreManager } from '@blocksuite/integration-test/store';
+import { createStarterDocCollection } from '../starter/utils/collection';
+import { getTestStoreManager } from './store-manager';
+import { initStarterDocCollection } from './collection';
+import { mountEditor } from './setup';
 
-import { setupEdgelessTemplate } from '../_common/setup.js';
-import { effects as commentEffects } from '../comment/effects.js';
-import { createStarterDocCollection, initStarterDocCollection } from '../starter/utils/collection';
-import { mountDefaultDocEditor } from '../starter/utils/setup-playground';
+interface InitBlocksuiteEditorOptions{
+  container: HTMLElement;
+}
 
 
-
-export async function initBlocksuiteEditor() {
+export async function initBlocksuiteEditor({
+  container,
+}: InitBlocksuiteEditorOptions) {
   itEffects();
   const storeManager = getTestStoreManager();
-  commentEffects();
   if (window.collection) return;
 
-  setupEdgelessTemplate();
-
   const collection = createStarterDocCollection(storeManager);
-
   await initStarterDocCollection(collection);
-  await mountDefaultDocEditor(collection);
+  const editor = await mountEditor(collection,container);
+  return editor;
+  
 }
 
