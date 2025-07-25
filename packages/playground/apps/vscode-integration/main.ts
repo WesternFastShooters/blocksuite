@@ -4,17 +4,15 @@ import { getTestStoreManager } from '@blocksuite/integration-test/store';
 
 import { setupEdgelessTemplate } from '../_common/setup.js';
 import { effects as commentEffects } from '../comment/effects.js';
-import {
-  createStarterDocCollection,
-  initStarterDocCollection,
-} from './utils/collection.js';
-import { mountDefaultDocEditor } from './utils/setup-playground';
+import { createStarterDocCollection, initStarterDocCollection } from '../starter/utils/collection';
+import { mountDefaultDocEditor } from '../starter/utils/setup-playground';
 
-itEffects();
-const storeManager = getTestStoreManager();
-commentEffects();
 
-async function main() {
+
+export async function initBlocksuiteEditor() {
+  itEffects();
+  const storeManager = getTestStoreManager();
+  commentEffects();
   if (window.collection) return;
 
   setupEdgelessTemplate();
@@ -25,4 +23,3 @@ async function main() {
   await mountDefaultDocEditor(collection);
 }
 
-main().catch(console.error);
