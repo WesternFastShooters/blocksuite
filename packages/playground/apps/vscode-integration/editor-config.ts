@@ -28,7 +28,6 @@ export const editorConfig = (editor: VscodeBlocksuiteEditor, ...props: any)=>{
     
     
       editor.doc.slots.blockUpdated.subscribe(()=>{
-        console.log('blockUpdated sts')
         const docToJSON = (doc:Store):string=>{
             const transformer = new Transformer({
               schema: doc.schema,
