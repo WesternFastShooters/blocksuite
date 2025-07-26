@@ -5,8 +5,6 @@ import { getTestStoreManager } from './store-manager';
 import { initStarterDocCollection } from './collection';
 import { mountEditor } from './setup';
 import { effects as commentEffects } from '../comment/effects.js';
-import { editorConfig } from './editor-config';
-import type { VscodeBlocksuiteEditor } from './create-editor';
 
 
 interface InitBlocksuiteEditorOptions{
@@ -26,7 +24,6 @@ export async function createBlocksuiteEditor({
   const collection = createStarterDocCollection(storeManager);
   await initStarterDocCollection(collection);
   const editor = await mountEditor(collection,container);
-  editorConfig(editor as VscodeBlocksuiteEditor);
   return editor;
   
 }

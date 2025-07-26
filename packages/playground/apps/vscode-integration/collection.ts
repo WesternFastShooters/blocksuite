@@ -40,7 +40,7 @@ export function createStarterDocCollection(
 export async function initStarterDocCollection(collection: TestWorkspace) {
     collection.meta.initialize();
   
-    const doc = collection.createDoc('doc:home');
+    const doc = collection.createDoc(`doc:${Date.now()}`);
   
   
     const store = doc.getStore({ id: 'doc:home' });

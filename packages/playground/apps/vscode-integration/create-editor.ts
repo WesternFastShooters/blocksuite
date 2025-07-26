@@ -18,8 +18,6 @@ import {
 } from '../_common/mock-services';
 
 export type VscodeBlocksuiteEditor = TestAffineEditorContainer & {
-  replaceEditorContentInVscode: (json:string)=>void;
-  onContentChange: (json:string)=>void;
 }
 
 const viewManager = getTestViewManager();
