@@ -26,7 +26,7 @@ export async function createBlocksuiteEditor({
   const collection = createStarterDocCollection(storeManager);
   await initStarterDocCollection(collection);
   const editor = await mountEditor(collection,container);
-  editorConfig((editor as VscodeBlocksuiteEditor),{store:editor?.doc,workspace:collection});
+  editorConfig(editor as VscodeBlocksuiteEditor);
   return editor;
   
 }
