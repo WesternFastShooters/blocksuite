@@ -50,4 +50,8 @@ export async function initStarterDocCollection(collection: TestWorkspace) {
     });
   
     store.resetHistory();
+
+    if (!doc?.loaded) {
+      doc?.load();
+    }
   }
