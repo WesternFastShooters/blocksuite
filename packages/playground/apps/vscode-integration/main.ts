@@ -12,7 +12,7 @@ interface InitBlocksuiteEditorOptions{
 }
 
 
-export async function initBlocksuiteEditor({
+export async function createBlocksuiteEditor({
   container,
 }: InitBlocksuiteEditorOptions) {
   itEffects();

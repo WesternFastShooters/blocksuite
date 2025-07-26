@@ -1,3 +1,3 @@
-import { initBlocksuiteEditor } from "./main";
+import { createBlocksuiteEditor } from "./main";
 
-initBlocksuiteEditor({container: document.getElementById('app') as HTMLElement})
+createBlocksuiteEditor({container: document.getElementById('app') as HTMLElement})
